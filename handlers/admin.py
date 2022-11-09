@@ -2,9 +2,9 @@ from aiogram import Dispatcher, types
 from create_bot import bot, dp
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+import os
 
-
-ID = 792501294
+ADMIN_ID = os.getenv("ADMIN_ID")
 
 class FSMAdmin(StatesGroup):
     photo = State()
@@ -13,7 +13,7 @@ class FSMAdmin(StatesGroup):
 
 
 async def block_bot(message: types.Message):
-    if message.from_user.id != ID:
+    if message.from_user.id != ADMIN_ID:
        await bot.send_message(message.from_user.id, 'Not Enough Permissions')
     else:
        await bot.send_message(message.from_user.id, 'Welcome')
@@ -29,7 +29,7 @@ async def block_bot(message: types.Message):
 #     print(ID)
 
 async def change_invite_start(message : types.Message):
-    if message.from_user.id == ID:
+    if message.from_user.id == ADMIN_ID:
         await FSMAdmin.photo.set()
         await message.reply('Загрузи фото')
     else:
