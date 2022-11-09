@@ -45,10 +45,11 @@ async def load_invite_message(message: types.Message, state = FSMContext):
     async with state.proxy() as data:
         data['invite'] = message.text
         await write_info(data)
+        await bot.send_photo(chat_id=ADMIN_ID, photo=open("inputfile.txt","r").read() , caption=open("inputtext.txt","r").read())
         await state.finish()
 
 async def error_command(message: types.Message):
-    if message.from_user.id == ID:
+    if message.from_user.id == ADMIN_ID:
         await bot.send_message(message.from_user.id, "Нет такой комманды")
     else:
         await bot.send_message(message.from_user.id, 'Not Enough Permissions')
