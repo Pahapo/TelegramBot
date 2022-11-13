@@ -5,6 +5,8 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
+SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
+
 
 class FSMAdmin(StatesGroup):
     photo = State()
@@ -13,7 +15,7 @@ class FSMAdmin(StatesGroup):
 
 
 async def block_bot(message: types.Message):
-    if message.from_user.id != ADMIN_ID:
+    if message.from_user.id != ADMIN_ID or message.from_user.id != SEC_ADMIN:
        await bot.send_message(message.from_user.id, 'Not Enough Permissions')
     else:
        await bot.send_message(message.from_user.id, 'Welcome')
@@ -29,7 +31,7 @@ async def block_bot(message: types.Message):
 #     print(ID)
 
 async def change_invite_start(message : types.Message):
-    if message.from_user.id == ADMIN_ID:
+    if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN:
         await FSMAdmin.photo.set()
         await message.reply('Загрузи фото')
     else:
@@ -49,7 +51,7 @@ async def load_invite_message(message: types.Message, state = FSMContext):
         await state.finish()
 
 async def error_command(message: types.Message):
-    if message.from_user.id == ADMIN_ID:
+    if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN:
         await bot.send_message(message.from_user.id, "Нет такой комманды")
     else:
         await bot.send_message(message.from_user.id, 'Not Enough Permissions')
