@@ -5,6 +5,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from model import invite_message_class
 from create_bot import session
+from other import photo_id, caption_message
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 
@@ -69,6 +70,10 @@ def reg_handlers_admin(dp : Dispatcher):
     # dp.register_message_handler(register_new_admin, commands=['register'])
 
 async def write_info(variable):
+    global photo_id
+    global caption_message
+    caption_message = variable['invite']
+    photo_id = variable['photo']
     session_engine = session()
     session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
     session_engine.commit()
