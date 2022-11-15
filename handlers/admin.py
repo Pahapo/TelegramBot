@@ -3,7 +3,8 @@ from create_bot import bot, dp
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
-
+from model import invite_message_class
+from create_bot import session
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 
@@ -47,7 +48,7 @@ async def load_invite_message(message: types.Message, state = FSMContext):
     async with state.proxy() as data:
         data['invite'] = message.text   
         await write_info(data)
-        await bot.send_photo(chat_id=ADMIN_ID, photo=open("inputfile.txt","r").read() , caption=open("inputtext.txt","r").read())
+        await bot.send_photo(chat_id=ADMIN_ID, photo=data['photo'] , caption=data['invite'])
         await state.finish()
 
 async def error_command(message: types.Message):
@@ -68,10 +69,12 @@ def reg_handlers_admin(dp : Dispatcher):
     # dp.register_message_handler(register_new_admin, commands=['register'])
 
 async def write_info(variable):
-    input_file = open("inputfile.txt", "w")
-    input_file.write(variable["photo"])
-    input_file.close
-
-    input_text = open("inputtext.txt", "w")
-    input_text.write(variable["invite"])
-    input_text.close()
+    exempl1 = invite_message_class(
+    invite_message=variable['invite'],
+    invite_picture = variable['photo'],
+    chanel_id = "",
+    chanel_name = ""
+    )
+    session_engine = session()
+    session_engine.add(exempl1)
+    session_engine.commit()
