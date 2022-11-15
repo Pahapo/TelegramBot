@@ -47,7 +47,11 @@ async def load_invite_photo(message: types.Message, state:FSMContext):
 
 async def load_invite_message(message: types.Message, state = FSMContext):
     async with state.proxy() as data:
-        data['invite'] = message.text   
+        data['invite'] = message.text
+        global photo_id
+        global caption_message
+        caption_message = data['invite']
+        photo_id = data['photo']   
         await write_info(data)
         print(caption_message)
         await bot.send_photo(chat_id=ADMIN_ID, photo=data['photo'] , caption=data['invite'])
@@ -71,10 +75,6 @@ def reg_handlers_admin(dp : Dispatcher):
     # dp.register_message_handler(register_new_admin, commands=['register'])
 
 async def write_info(variable):
-    global photo_id
-    global caption_message
-    caption_message = variable['invite']
-    photo_id = variable['photo']
     session_engine = session()
     session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
     session_engine.commit()

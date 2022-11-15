@@ -22,7 +22,7 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
     except CantInitiateConversation:
         asyncio.sleep(0.1)
         print('Cant Initiate Dialog:'+str(chat_member.from_user.id))
-
+        
 def reg_handlers_other(dp : Dispatcher):
     dp.register_chat_join_request_handler(inviteApplyMessage)
 
