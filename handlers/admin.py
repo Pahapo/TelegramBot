@@ -5,7 +5,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from model import invite_message_class
 from create_bot import session
-from other import photo_id, caption_message
+from .other import photo_id, caption_message
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 
