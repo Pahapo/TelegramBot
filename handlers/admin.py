@@ -69,12 +69,6 @@ def reg_handlers_admin(dp : Dispatcher):
     # dp.register_message_handler(register_new_admin, commands=['register'])
 
 async def write_info(variable):
-    exempl1 = invite_message_class(
-    invite_message=variable['invite'],
-    invite_picture = variable['photo'],
-    chanel_id = "",
-    chanel_name = ""
-    )
     session_engine = session()
-    session_engine.add(exempl1)
+    session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
     session_engine.commit()
