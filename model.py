@@ -1,6 +1,5 @@
 from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import declarative_base
-from database_bot import invite_message_class
 from sqlalchemy import String, Column, Identity, Integer, Text
 
 
