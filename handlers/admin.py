@@ -49,6 +49,7 @@ async def load_invite_message(message: types.Message, state = FSMContext):
     async with state.proxy() as data:
         data['invite'] = message.text   
         await write_info(data)
+        print(caption_message)
         await bot.send_photo(chat_id=ADMIN_ID, photo=data['photo'] , caption=data['invite'])
         await state.finish()
 
