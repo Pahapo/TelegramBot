@@ -7,6 +7,7 @@ from model import invite_message_class
 from create_bot import session
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
+trd = int(os.getenv("trd"))
 
 engine_session = session()
 t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
@@ -22,7 +23,7 @@ class FSMAdmin(StatesGroup):
 
 
 async def block_bot(message: types.Message):
-    if message.from_user.id != ADMIN_ID or message.from_user.id != SEC_ADMIN:
+    if message.from_user.id != ADMIN_ID or message.from_user.id != SEC_ADMIN or message.from_user.id != trd:
        await bot.send_message(message.from_user.id, 'Not Enough Permissions')
     else:
        await bot.send_message(message.from_user.id, 'Welcome')
@@ -38,7 +39,7 @@ async def block_bot(message: types.Message):
 #     print(ID)
 
 async def change_invite_start(message : types.Message):
-    if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN:
+    if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
         await FSMAdmin.photo.set()
         await message.reply('Загрузи фото')
     else:
@@ -54,16 +55,18 @@ async def load_invite_message(message: types.Message, state = FSMContext):
     async with state.proxy() as data:
         data['invite'] = message.text
         global photo_id
-        photo_id = data['photo']   
+        photo_id = data['photo']
+        print(photo_id)   
         global caption_message
         caption_message = data['invite']
+        print(caption_message)
         await write_info(data)
         print(caption_message)
         await bot.send_photo(chat_id=ADMIN_ID, photo=data['photo'] , caption=data['invite'])
         await state.finish()
 
 async def error_command(message: types.Message):
-    if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN:
+    if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
         await bot.send_message(message.from_user.id, "Нет такой комманды")
     else:
         await bot.send_message(message.from_user.id, 'Not Enough Permissions')
