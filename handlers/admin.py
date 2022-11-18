@@ -5,6 +5,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from model import invite_message_class
 from create_bot import session
+from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
@@ -69,6 +70,15 @@ async def print_invite(chat_member: types.Message):
     if chat_member.from_user.id == ADMIN_ID or chat_member.from_user.id == SEC_ADMIN or chat_member.from_user.id == trd:
        await bot.send_photo(chat_member.from_user.id, photo=photo_id, caption=caption_message)
 
+
+async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
+    try:
+        await bot.send_photo(chat_id= chat_member.from_user.id,photo=photo_id , caption=caption_message)
+    except BotBlocked:
+        print('Bot Blocked:'+str(chat_member.from_user.id))
+    except CantInitiateConversation:
+        print('Cant Initiate Dialog:'+str(chat_member.from_user.id))
+
 async def error_command(message: types.Message):
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
         await bot.send_message(message.from_user.id, "Нет такой комманды")
@@ -83,6 +93,7 @@ def reg_handlers_admin(dp : Dispatcher):
     dp.register_message_handler(load_invite_message, state=FSMAdmin.invite)
     dp.register_message_handler(block_bot, commands='start')
     dp.register_message_handler(print_invite, commands=['invite'])
+    dp.register_chat_join_request_handler(inviteApplyMessage)
     dp.register_message_handler(error_command)
     # dp.register_message_handler(invite_message, commands=['йоу'])
     # dp.register_message_handler(register_new_admin, commands=['register'])
