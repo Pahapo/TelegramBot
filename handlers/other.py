@@ -10,17 +10,10 @@ from .admin import ADMIN_ID, SEC_ADMIN, trd
 
 
 
-async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
-    try:
-        await bot.send_photo(chat_id= chat_member.from_user.id,photo=photo_id , caption=caption_message)
-    except BotBlocked:
-        print('Bot Blocked:'+str(chat_member.from_user.id))
-    except CantInitiateConversation:
-        print('Cant Initiate Dialog:'+str(chat_member.from_user.id))
+
 
 
 
         
 def reg_handlers_other(dp : Dispatcher):
-    dp.register_chat_join_request_handler(inviteApplyMessage)
-
+    pass
