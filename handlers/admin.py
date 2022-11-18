@@ -62,7 +62,7 @@ async def load_invite_message(message: types.Message, state = FSMContext):
         print(caption_message)
         await write_info(data)
         print(caption_message)
-        await bot.send_photo(chat_id=ADMIN_ID, photo=data['photo'] , caption=data['invite'])
+        await bot.send_photo(chat_id=message.from_user.id, photo=data['photo'] , caption=data['invite'])
         await state.finish()
 
 async def error_command(message: types.Message):
