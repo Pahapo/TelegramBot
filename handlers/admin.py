@@ -23,10 +23,10 @@ class FSMAdmin(StatesGroup):
 
 
 async def block_bot(message: types.Message):
-    if message.from_user.id != ADMIN_ID or message.from_user.id != SEC_ADMIN or message.from_user.id != trd:
-       await bot.send_message(message.from_user.id, 'Not Enough Permissions')
-    else:
+    if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
        await bot.send_message(message.from_user.id, 'Welcome')
+    else:
+       await bot.send_message(message.from_user.id, 'Not Enough Permissions')
     
 
 # async def register_new_admin(message: types.ChatMemberOwner):
@@ -69,7 +69,7 @@ async def error_command(message: types.Message):
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
         await bot.send_message(message.from_user.id, "Нет такой комманды")
     else:
-        await bot.send_message(message.from_user.id, 'Not Enough Permissions')
+        await bot.send_message(message.from_user.id, 'Not Enough permissions')
 # async def invite_message(message: types.Message):
 #     await bot.send_message(message.from_user.id,open("inputtext.txt","r").read())
 
