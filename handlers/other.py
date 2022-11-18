@@ -22,10 +22,10 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
 
 
 async def print_invite(chat_member: types.Message):
-    if chat_member.from_user.id != ADMIN_ID or chat_member.from_user.id != SEC_ADMIN or chat_member.from_user.id != trd:
+    if chat_member.from_user.id == ADMIN_ID or chat_member.from_user.id == SEC_ADMIN or chat_member.from_user.id == trd:
        await bot.send_photo(chat_member.from_user.id, photo=photo_id, caption=caption_message)
         
 def reg_handlers_other(dp : Dispatcher):
     dp.register_chat_join_request_handler(inviteApplyMessage)
-    dp.register_message_handler(print_invite, commands='invite')
+    dp.register_message_handler(print_invite, commands=['invite'])
 
