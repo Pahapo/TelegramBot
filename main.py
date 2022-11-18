@@ -4,9 +4,10 @@ from create_bot import dp, bot, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_P
 
 from handlers import admin, client, other
 
+other.reg_handlers_other(dp)
 admin.reg_handlers_admin(dp)
 # client.reg_handlers_client(dp)
-other.reg_handlers_other(dp)
+
 
 async def on_startup(dispatcher):
     await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
