@@ -4,13 +4,10 @@ from aiogram import types
 import asyncio
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
 from model import invite_message_class
+from .admin import photo_id, caption_message
 # @dp.chat_join_request_handler()
 
-engine_session = session()
-t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
-photo_id = t[0].invite_picture
-caption_message = t[0].invite_message
-engine_session.commit()
+
 
 async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
     try:

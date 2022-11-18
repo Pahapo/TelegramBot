@@ -5,9 +5,14 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from model import invite_message_class
 from create_bot import session
-from .other import photo_id, caption_message
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
+
+engine_session = session()
+t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
+photo_id = t[0].invite_picture
+caption_message = t[0].invite_message
+engine_session.commit()
 
 
 class FSMAdmin(StatesGroup):
