@@ -11,12 +11,15 @@ ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
-engine_session = session_maker()
-t = engine_session.execute(select(invite_message_class).where(invite_message_class.id == 1))
-photo_id = t[0].invite_picture
-caption_message = t[0].invite_message
-engine_session.commit()
+async def get_messages():
+    engine_session = session_maker()
+    t = await engine_session.execute(select(invite_message_class).where(invite_message_class.id == 1))
+    photo_id = t[0].invite_picture
+    caption_message = t[0].invite_message
+    engine_session.commit()
+    return photo_id, caption_message
 
+photo_id, caption_message = get_messages()
 
 class FSMAdmin(StatesGroup):
     photo = State()
