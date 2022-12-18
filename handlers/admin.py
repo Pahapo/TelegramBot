@@ -7,6 +7,7 @@ from model import invite_message_class, User
 from create_bot import session
 from psycopg2.errors import UniqueViolation
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
+from sqlalchemy.exc import IntegrityError
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
@@ -79,7 +80,7 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
         sess = session()
         sess.add(c1)
         sess.commit()
-    except UniqueViolation:
+    except IntegrityError:
         print(chat_member.from_user.id)
     try:
         await bot.send_photo(chat_id= chat_member.from_user.id,photo=photo_id , caption=caption_message)
