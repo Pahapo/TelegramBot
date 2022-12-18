@@ -10,7 +10,7 @@ ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
-engine_session = engine
+engine_session = session_maker()
 t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
 photo_id = t[0].invite_picture
 caption_message = t[0].invite_message
