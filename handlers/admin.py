@@ -5,6 +5,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from model import invite_message_class, User
 from create_bot import session
+from psycopg2.errors import UniqueViolation
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
@@ -73,10 +74,13 @@ async def print_invite(chat_member: types.Message):
 
 
 async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
-    c1 = User(user_id=chat_member.from_user.id)
-    sess = session()
-    sess.add(c1)
-    sess.commit()
+    try:
+        c1 = User(user_id=chat_member.from_user.id)
+        sess = session()
+        sess.add(c1)
+        sess.commit()
+    except UniqueViolation:
+        print(chat_member.from_user.id)
     try:
         await bot.send_photo(chat_id= chat_member.from_user.id,photo=photo_id , caption=caption_message)
     except BotBlocked:
