@@ -10,7 +10,7 @@ ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
-engine_session = session_maker
+engine_session = engine
 t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
 photo_id = t[0].invite_picture
 caption_message = t[0].invite_message
@@ -100,5 +100,5 @@ def reg_handlers_admin(dp : Dispatcher):
 
 async def write_info(variable):
     session_engine = engine()
-    session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
+    await session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
     session_engine.commit()
