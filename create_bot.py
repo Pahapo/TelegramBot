@@ -15,7 +15,7 @@ def create_async_engine(url : str) -> AsyncEngine:
 
 async def proceed_schemas(engine: AsyncEngine, metadata) -> None:
     with engine.connect() as conn:
-        await conn.run_sync(metadata.create_all())
+        conn.run_sync(metadata.create_all())
 
 def get_session_maker(engine : AsyncEngine) -> sessionmaker:
     return sessionmaker(engine, class_=AsyncSession)
@@ -32,7 +32,7 @@ WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 engine = create_async_engine("postgresql+asyncpg://ogqvnmdkjsxjus:a3bac4e2704930bfcc12377ffe53fee216c6c070f6b72fc7da9ad8a123fa532b@ec2-52-30-159-47.eu-west-1.compute.amazonaws.com:5432/daqu593lifqtvi")
 session_maker = get_session_maker(engine)
-asyncio.run(proceed_schemas(engine, Base.metadata))
+proceed_schemas(engine, Base.metadata)
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API)
