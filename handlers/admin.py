@@ -1,29 +1,21 @@
 from aiogram import Dispatcher, types
-from sqlalchemy import select
 from create_bot import bot, dp
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from model import invite_message_class
-from create_bot import engine, session_maker
+from create_bot import session
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
-import asyncio
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
-async def get_messages():
-    engine_session = session_maker()
-    t = await engine_session.execute(select(invite_message_class).where(invite_message_class.id == 1))
-    photo_id = t[0].invite_picture
-    print(photo_id)
-    caption_message = t[0].invite_message
-    print(caption_message)
-    engine_session.commit()
-    # return await photo_id, caption_message
+engine_session = session()
+t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
+photo_id = t[0].invite_picture
+caption_message = t[0].invite_message
+engine_session.commit()
 
-loop = asyncio.new_event_loop()
-asyncio.get_event_loop().run_until_complete(get_messages())
 
 class FSMAdmin(StatesGroup):
     photo = State()
@@ -107,6 +99,6 @@ def reg_handlers_admin(dp : Dispatcher):
     # dp.register_message_handler(register_new_admin, commands=['register'])
 
 async def write_info(variable):
-    session_engine = engine()
-    await session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
+    session_engine = session()
+    session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
     session_engine.commit()
