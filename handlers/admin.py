@@ -76,13 +76,6 @@ async def print_invite(chat_member: types.Message):
 
 async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
     try:
-        c1 = User(user_id=chat_member.from_user.id)
-        sess = session()
-        sess.add(c1)
-        sess.commit()
-    except IntegrityError:
-        print(chat_member.from_user.id)
-    try:
         await bot.send_photo(chat_id= chat_member.from_user.id,photo=photo_id , caption=caption_message)
     except BotBlocked:
         print('Bot Blocked:'+str(chat_member.from_user.id))
