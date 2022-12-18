@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import InputFile
 from sqlalchemy import create_engine
-
+import asyncio
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine
 from sqlalchemy.ext.asyncio import create_async_engine as _create_async_engine
@@ -32,7 +32,7 @@ WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 engine = create_async_engine("postgresql+asyncpg://ogqvnmdkjsxjus:a3bac4e2704930bfcc12377ffe53fee216c6c070f6b72fc7da9ad8a123fa532b@ec2-52-30-159-47.eu-west-1.compute.amazonaws.com:5432/daqu593lifqtvi")
 session_maker = get_session_maker(engine)
-proceed_schemas(engine, Base.metadata)
+asyncio.run(proceed_schemas(engine, Base.metadata))
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API)

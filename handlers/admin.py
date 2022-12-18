@@ -7,6 +7,7 @@ import os
 from model import invite_message_class
 from create_bot import engine, session_maker
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
+import asyncio
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
@@ -21,7 +22,7 @@ async def get_messages():
     engine_session.commit()
     return await photo_id, caption_message
 
-photo_id, caption_message = get_messages()
+photo_id, caption_message = asyncio.run(get_messages())
 
 class FSMAdmin(StatesGroup):
     photo = State()
