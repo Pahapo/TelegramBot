@@ -75,7 +75,7 @@ async def print_invite(chat_member: types.Message):
 async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
     c1 = User(user_id=chat_member.from_user.id)
     sess = session()
-    sess.add()
+    sess.add(c1)
     sess.commit()
     try:
         await bot.send_photo(chat_id= chat_member.from_user.id,photo=photo_id , caption=caption_message)
