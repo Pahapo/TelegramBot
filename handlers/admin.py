@@ -22,7 +22,7 @@ async def get_messages():
     engine_session.commit()
     # return await photo_id, caption_message
 
-asyncio.run(get_messages)
+asyncio.run(get_messages())
 
 class FSMAdmin(StatesGroup):
     photo = State()
