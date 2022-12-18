@@ -1,4 +1,5 @@
 from aiogram import Dispatcher, types
+from sqlalchemy import select
 from create_bot import bot, dp
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -11,7 +12,7 @@ SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
 engine_session = session_maker()
-t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
+t = engine_session.execute(select(invite_message_class).where(invite_message_class.id == 1))
 photo_id = t[0].invite_picture
 caption_message = t[0].invite_message
 engine_session.commit()
