@@ -3,7 +3,7 @@ from create_bot import bot, dp
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
-from model import invite_message_class
+from model import invite_message_class, User
 from create_bot import session
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
@@ -40,6 +40,7 @@ async def block_bot(message: types.Message):
 #     print(ID)
 
 async def change_invite_start(message : types.Message):
+
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
         await FSMAdmin.photo.set()
         await message.reply('Загрузи фото')
@@ -72,6 +73,10 @@ async def print_invite(chat_member: types.Message):
 
 
 async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
+    c1 = User(user_id=chat_member.from_user.id)
+    sess = session()
+    sess.add()
+    sess.commit()
     try:
         await bot.send_photo(chat_id= chat_member.from_user.id,photo=photo_id , caption=caption_message)
     except BotBlocked:
