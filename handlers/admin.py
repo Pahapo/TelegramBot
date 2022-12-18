@@ -19,7 +19,7 @@ async def get_messages():
     caption_message = t[0].invite_message
     print(caption_message)
     engine_session.commit()
-    return photo_id, caption_message
+    return await photo_id, caption_message
 
 photo_id, caption_message = get_messages()
 
