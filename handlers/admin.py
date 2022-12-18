@@ -4,14 +4,14 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from model import invite_message_class
-from create_bot import engine
+from create_bot import engine, session_maker
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
-engine_session = engine
-t = engine.query(invite_message_class).filter(invite_message_class.id == 1).all()
+engine_session = session_maker
+t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
 photo_id = t[0].invite_picture
 caption_message = t[0].invite_message
 engine_session.commit()
@@ -99,6 +99,6 @@ def reg_handlers_admin(dp : Dispatcher):
     # dp.register_message_handler(register_new_admin, commands=['register'])
 
 async def write_info(variable):
-    session_engine = session()
+    session_engine = engine()
     session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update({"invite_message":variable['invite'],"invite_picture":variable['photo']})
     session_engine.commit()
