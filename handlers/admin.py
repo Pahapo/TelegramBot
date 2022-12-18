@@ -15,7 +15,9 @@ async def get_messages():
     engine_session = session_maker()
     t = await engine_session.execute(select(invite_message_class).where(invite_message_class.id == 1))
     photo_id = t[0].invite_picture
+    print(photo_id)
     caption_message = t[0].invite_message
+    print(caption_message)
     engine_session.commit()
     return photo_id, caption_message
 
