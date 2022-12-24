@@ -37,7 +37,7 @@ def update_data(session, variable):
 async def write_info(variable):
     async with session_maker() as session:
         async with session.begin():
-            session.run_sync(update_data(variable=variable))
+            session.run_sync(update_data(session, variable))
             await session.commit()
 
 
