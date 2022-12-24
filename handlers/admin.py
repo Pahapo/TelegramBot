@@ -6,6 +6,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from sqlalchemy.future import select
+from sqlalchemy import update
 from model import invite_message_class, User
 from create_bot import session_maker
 from psycopg2.errors import UniqueViolation
@@ -37,6 +38,7 @@ async def get_invite_message():
             global photo_id
             photo_id = result.invite_picture
             await session.commit()
+
 
 ioloop = asyncio.get_event_loop()
 ioloop.run_until_complete(get_invite_message())
@@ -84,7 +86,7 @@ async def load_invite_message(message: types.Message, state=FSMContext):
         global photo_id
         photo_id = data['photo']
         print(photo_id)
-        global caption_message
+        global caption
         caption_message = data['invite']
         print(caption_message)
         await write_info(data)
@@ -130,7 +132,13 @@ def reg_handlers_admin(dp: Dispatcher):
 
 
 async def write_info(variable):
-    session_engine = session()
-    session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update(
-        {"invite_message": variable['invite'], "invite_picture": variable['photo']})
-    session_engine.commit()
+    async with session_maker() as session:
+        async with session.begin():
+            await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
+                invite_message=variable['invite'],
+                invite_picture=variable['photo']))
+            await session.commit()
+    # session_engine = session()
+    # session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update(
+    #     {"invite_message": variable['invite'], "invite_picture": variable['photo']})
+    # session_engine.commit()
