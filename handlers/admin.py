@@ -30,12 +30,13 @@ async def get_invite_message():
     async with session_maker() as session:
         async with session.begin():
             stmt = await session.execute(select(invite_message_class))
-            result = stmt.first()
+            result = stmt.scalars().first()
             print(result.id)
             global caption
             caption = result.invite_message
             global photo_id
             photo_id = result.invite_picture
+            await session.commit()
 
 
 asyncio.run(get_invite_message())
