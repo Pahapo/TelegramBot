@@ -17,14 +17,12 @@ ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
+
 # engine_session = session()
 # t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
 # photo_id = t[0].invite_picture
 # caption_message = t[0].invite_message
 # engine_session.commit()
-
-photo_id = ''
-caption = ''
 
 
 async def get_invite_message():
@@ -33,15 +31,19 @@ async def get_invite_message():
             stmt = await session.execute(select(invite_message_class))
             result = stmt.scalars().first()
             print(result.id)
-            global caption
+            # global caption
             caption = result.invite_message
-            global photo_id
+            # global photo_id
             photo_id = result.invite_picture
             await session.commit()
+            return await caption, photo_id
 
 
-ioloop = asyncio.get_event_loop()
-ioloop.run_until_complete(get_invite_message())
+caption, photo_id = await get_invite_message()
+
+
+# ioloop = asyncio.get_event_loop()
+# ioloop.run_until_complete(get_invite_message())
 
 
 class FSMAdmin(StatesGroup):
