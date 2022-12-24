@@ -31,7 +31,7 @@ async def get_invite_message():
         async with session.begin():
             stmt = await session.execute(select(invite_message_class))
             result = stmt.first()
-            print(result)
+            print(result.id)
             global caption
             caption = result.invite_message
             global photo_id
