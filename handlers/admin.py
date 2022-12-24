@@ -49,7 +49,7 @@ async def get_invite_message():
             await session.commit()
 
 
-ioloop = asyncio.get_running_loop()
+ioloop = asyncio.get_event_loop()
 ioloop.run_until_complete(get_invite_message())
 
 
