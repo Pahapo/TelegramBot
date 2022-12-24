@@ -15,4 +15,4 @@ async def proceed_schemas(engine: AsyncEngine, metadata):
 
 
 def get_session_maker(engine: AsyncEngine) -> sessionmaker:
-    return sessionmaker(engine, class_=AsyncSession)
+    return sessionmaker(engine,expire_on_commit=False, class_=AsyncSession)
