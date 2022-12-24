@@ -26,7 +26,13 @@ trd = int(os.getenv("trd"))
 photo_id = ''
 caption = ''
 
-
+async def write_info(variable):
+    async with session_maker() as session:
+        async with session.begin():
+            await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
+                invite_message=variable['invite'],
+                invite_picture=variable['photo']))
+            await session.commit()
 async def get_invite_message():
     async with session_maker() as session:
         async with session.begin():
@@ -131,13 +137,7 @@ def reg_handlers_admin(dp: Dispatcher):
     # dp.register_message_handler(register_new_admin, commands=['register'])
 
 
-async def write_info(variable):
-    async with session_maker() as session:
-        async with session.begin():
-            await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
-                invite_message=variable['invite'],
-                invite_picture=variable['photo']))
-            await session.commit()
+
     # session_engine = session()
     # session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update(
     #     {"invite_message": variable['invite'], "invite_picture": variable['photo']})
