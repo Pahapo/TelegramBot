@@ -27,32 +27,25 @@ photo_id = ''
 caption = ''
 
 
-def update_data(session, variable):
-    stmt = update(invite_message_class).where(invite_message_class.id == 1).values(
-        invite_message=variable['invite'],
-        invite_picture=variable['photo'])
-    session.execute(stmt)
-
-
 async def write_info(variable):
     async with session_maker() as session:
-        async with session.begin():
-            await session.run_sync(update_data(variable))
-            await session.commit()
+        await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
+            invite_message=variable['invite'],
+            invite_picture=variable['photo']))
+        await session.commit()
 
 
 async def get_invite_message():
     async with session_maker() as session:
-        async with session.begin():
-            stmt = await session.execute(select(invite_message_class))
-            result = stmt.scalars().first()
-            print(result.id)
-            global caption
-            caption = result.invite_message
-            global photo_id
-            photo_id = result.invite_picture
-            print('123123123')
-            await session.commit()
+        stmt = await session.execute(select(invite_message_class))
+        result = stmt.scalars().first()
+        print(result.id)
+        global caption
+        caption = result.invite_message
+        global photo_id
+        photo_id = result.invite_picture
+        print('123123123')
+        await session.commit()
 
 
 ioloop = asyncio.get_event_loop()
