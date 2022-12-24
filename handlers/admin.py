@@ -95,12 +95,12 @@ async def load_invite_message(message: types.Message, state=FSMContext):
 
 async def print_invite(chat_member: types.Message):
     if chat_member.from_user.id == ADMIN_ID or chat_member.from_user.id == SEC_ADMIN or chat_member.from_user.id == trd:
-        await bot.send_photo(chat_member.from_user.id, photo=photo_id, caption=caption_message)
+        await bot.send_photo(chat_member.from_user.id, photo=photo_id, caption=caption)
 
 
 async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
     try:
-        await bot.send_photo(chat_id=chat_member.from_user.id, photo=photo_id, caption=caption_message)
+        await bot.send_photo(chat_id=chat_member.from_user.id, photo=photo_id, caption=caption)
     except BotBlocked:
         print('Bot Blocked:' + str(chat_member.from_user.id))
     except CantInitiateConversation:
