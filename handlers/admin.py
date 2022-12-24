@@ -49,7 +49,7 @@ async def get_invite_message():
             await session.commit()
 
 
-ioloop = asyncio.get_event_loop()
+ioloop = asyncio.get_running_loop()
 ioloop.run_until_complete(get_invite_message())
 
 
@@ -98,8 +98,7 @@ async def load_invite_message(message: types.Message, state=FSMContext):
         global caption
         caption_message = data['invite']
         print(caption_message)
-        task = ioloop.create_task(write_info(data))
-        await task
+        await write_info(data)
         print(caption_message)
         await bot.send_photo(chat_id=message.from_user.id, photo=data['photo'], caption=data['invite'])
         await state.finish()
