@@ -30,10 +30,10 @@ caption = ''
 async def write_info(variable):
     async with session_maker() as session:
         async with session.begin():
-            session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
+            await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
                 invite_message=variable['invite'],
                 invite_picture=variable['photo']))
-            session.commit()
+            await session.commit()
 
 
 async def get_invite_message():
