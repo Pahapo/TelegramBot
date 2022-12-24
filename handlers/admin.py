@@ -40,7 +40,6 @@ async def get_invite_message():
 
 ioloop = asyncio.get_event_loop()
 ioloop.run_until_complete(get_invite_message())
-ioloop.close()
 
 
 class FSMAdmin(StatesGroup):
