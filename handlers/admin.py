@@ -46,6 +46,7 @@ async def get_invite_message():
             caption = result.invite_message
             global photo_id
             photo_id = result.invite_picture
+            print('123123123')
             await session.commit()
 
 
