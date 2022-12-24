@@ -33,6 +33,7 @@ async def write_info(variable):
             asd = await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
                 invite_message=variable['invite'],
                 invite_picture=variable['photo']))
+            print('complete')
             await session.commit()
 
 
