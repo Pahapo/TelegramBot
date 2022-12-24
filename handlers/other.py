@@ -1,4 +1,4 @@
-from create_bot import dp, bot, session
+from create_bot import dp, bot
 from aiogram import Dispatcher, types
 from aiogram import types
 import asyncio
