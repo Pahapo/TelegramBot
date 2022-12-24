@@ -26,6 +26,7 @@ trd = int(os.getenv("trd"))
 photo_id = ''
 caption = ''
 
+
 async def write_info(variable):
     async with session_maker() as session:
         async with session.begin():
@@ -33,6 +34,7 @@ async def write_info(variable):
                 invite_message=variable['invite'],
                 invite_picture=variable['photo']))
             await session.commit()
+
 
 async def get_invite_message():
     async with session_maker() as session:
@@ -49,7 +51,7 @@ async def get_invite_message():
 
 ioloop = asyncio.get_event_loop()
 ioloop.run_until_complete(get_invite_message())
-ioloop.close()
+
 
 class FSMAdmin(StatesGroup):
     photo = State()
@@ -96,7 +98,7 @@ async def load_invite_message(message: types.Message, state=FSMContext):
         global caption
         caption_message = data['invite']
         print(caption_message)
-        await write_info(data)
+        ioloop.create_task(write_info(data))
         print(caption_message)
         await bot.send_photo(chat_id=message.from_user.id, photo=data['photo'], caption=data['invite'])
         await state.finish()
@@ -136,8 +138,6 @@ def reg_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(error_command)
     # dp.register_message_handler(invite_message, commands=['йоу'])
     # dp.register_message_handler(register_new_admin, commands=['register'])
-
-
 
     # session_engine = session()
     # session_engine.query(invite_message_class).filter(invite_message_class.id == 1).update(
