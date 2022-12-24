@@ -98,7 +98,8 @@ async def load_invite_message(message: types.Message, state=FSMContext):
         global caption
         caption_message = data['invite']
         print(caption_message)
-        ioloop.create_task(write_info(data))
+        task = ioloop.create_task(write_info(data))
+        await task
         print(caption_message)
         await bot.send_photo(chat_id=message.from_user.id, photo=data['photo'], caption=data['invite'])
         await state.finish()
