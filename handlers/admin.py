@@ -43,12 +43,12 @@ async def get_invite_message():
         global photo_id
         photo_id = result.invite_picture
         print('123123123')
-        print(session.get_transaction())
         await session.commit()
         print(session.get_transaction())
 
 
 ioloop = asyncio.get_event_loop()
+print(ioloop)
 ioloop.run_until_complete(get_invite_message())
 print(ioloop)
 
