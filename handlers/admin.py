@@ -61,8 +61,8 @@ class FSMAdmin(StatesGroup):
 
 
 async def block_bot(message: types.Message):
+    print('block_bot')
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
-        print('block_bot')
         await bot.send_message(message.from_user.id, 'Welcome')
     else:
         await bot.send_message(message.from_user.id, 'Not Enough Permissions')
@@ -129,8 +129,9 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
 
 
 async def error_command(message: types.Message):
+    print('error_command')
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
-        print('error_command')
+
         await bot.send_message(message.from_user.id, "Нет такой комманды")
     else:
         await bot.send_message(message.from_user.id, 'Not Enough permissions')
