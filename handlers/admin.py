@@ -26,11 +26,11 @@ trd = int(os.getenv("trd"))
 photo_id = ''
 caption = ''
 async def write_info(variable):
-    async with session_maker() as session:
-        await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
+    with session_maker() as session:
+        session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
             invite_message=variable['invite'],
             invite_picture=variable['photo']))
-        await session.commit()
+        session.commit()
 
 
 async def get_invite_message():
@@ -48,7 +48,6 @@ async def get_invite_message():
 
 
 ioloop = asyncio.get_event_loop()
-print(ioloop)
 ioloop.run_until_complete(get_invite_message())
 print(ioloop)
 
