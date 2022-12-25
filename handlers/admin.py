@@ -44,7 +44,7 @@ async def get_invite_message():
         photo_id = result.invite_picture
         print('123123123')
         await session.commit()
-        await session.close()
+        print(session.get_transaction())
 
 
 ioloop = asyncio.get_event_loop()
