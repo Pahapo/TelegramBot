@@ -6,7 +6,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import os
 from sqlalchemy.future import select
-from sqlalchemy import update
+from sqlalchemy import update, insert
 from model import invite_message_class, User
 from create_bot import session_maker
 from psycopg2.errors import UniqueViolation
@@ -62,6 +62,7 @@ class FSMAdmin(StatesGroup):
 
 async def block_bot(message: types.Message):
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
+        print('block_bot')
         await bot.send_message(message.from_user.id, 'Welcome')
     else:
         await bot.send_message(message.from_user.id, 'Not Enough Permissions')
@@ -118,7 +119,6 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
         print(result.id)
         caption = result.invite_message
         photo_id = result.invite_picture
-        print('123123123')
         await session.commit()
     try:
         await bot.send_photo(chat_id=chat_member.from_user.id, photo=photo_id, caption=caption)
@@ -130,6 +130,7 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
 
 async def error_command(message: types.Message):
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
+        print('error_command')
         await bot.send_message(message.from_user.id, "Нет такой комманды")
     else:
         await bot.send_message(message.from_user.id, 'Not Enough permissions')
