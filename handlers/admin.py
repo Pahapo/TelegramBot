@@ -122,7 +122,7 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
         try:
             stm = await session.execute(insert(User).values(user_id=str(chat_member.from_user.id)))
         except IntegrityError:
-            print('Already exists: ' + chat_member.from_user.id)
+            print('Already exists: ' + str(chat_member.from_user.id))
         await session.commit()
     try:
         await bot.send_photo(chat_id=chat_member.from_user.id, photo=photo_id, caption=caption)
