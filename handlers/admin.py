@@ -25,8 +25,12 @@ trd = int(os.getenv("trd"))
 
 photo_id = ''
 caption = ''
-
-
+async with session_maker() as session:
+    stmt = session.execute(select(invite_message_class))
+    result = stmt.scalars().first()
+    caption = result.invite_message
+    photo_id = result.invite_picture
+    session.commit()
 async def write_info(variable):
     async with session_maker() as session:
         await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
@@ -35,22 +39,22 @@ async def write_info(variable):
         await session.commit()
 
 
-async def get_invite_message():
-    async with session_maker() as session:
-        stmt = await session.execute(select(invite_message_class))
-        result = stmt.scalars().first()
-        print(result.id)
-        global caption
-        caption = result.invite_message
-        global photo_id
-        photo_id = result.invite_picture
-        print('123123123')
-        await session.commit()
+# async def get_invite_message():
+#     async with session_maker() as session:
+#         stmt = await session.execute(select(invite_message_class))
+#         result = stmt.scalars().first()
+#         print(result.id)
+#         global caption
+#         caption = result.invite_message
+#         global photo_id
+#         photo_id = result.invite_picture
+#         print('123123123')
+#         await session.commit()
 
 
-ioloop = asyncio.get_event_loop()
-ioloop.run_until_complete(get_invite_message())
-print(ioloop)
+# ioloop = asyncio.get_event_loop()
+# ioloop.run_until_complete(get_invite_message())
+# print(ioloop)
 
 
 class FSMAdmin(StatesGroup):
