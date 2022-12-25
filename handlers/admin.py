@@ -17,14 +17,17 @@ ADMIN_ID = int(os.getenv("ADMIN_ID"))
 SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
 trd = int(os.getenv("trd"))
 
+
 # engine_session = session()
 # t = engine_session.query(invite_message_class).filter(invite_message_class.id == 1).all()
 # photo_id = t[0].invite_picture
 # caption_message = t[0].invite_message
 # engine_session.commit()
 
-photo_id = ''
-caption = ''
+# photo_id = ''
+# caption = ''
+
+
 async def write_info(variable):
     async with session_maker() as session:
         await session.execute(update(invite_message_class).where(invite_message_class.id == 1).values(
@@ -33,23 +36,23 @@ async def write_info(variable):
         await session.commit()
 
 
-async def get_invite_message():
-    async with session_maker() as session:
-        stmt = await session.execute(select(invite_message_class))
-        result = stmt.scalars().first()
-        print(result.id)
-        global caption
-        caption = result.invite_message
-        global photo_id
-        photo_id = result.invite_picture
-        print('123123123')
-        await session.commit()
-        print(session.get_transaction())
+# async def get_invite_message():
+#     async with session_maker() as session:
+#         stmt = await session.execute(select(invite_message_class))
+#         result = stmt.scalars().first()
+#         print(result.id)
+#         global caption
+#         caption = result.invite_message
+#         global photo_id
+#         photo_id = result.invite_picture
+#         print('123123123')
+#         await session.commit()
+#         print(session.get_transaction())
 
-
-ioloop = asyncio.get_event_loop()
-ioloop.run_until_complete(get_invite_message())
-print(ioloop)
+#
+# ioloop = asyncio.get_event_loop()
+# ioloop.run_until_complete(get_invite_message())
+# print(ioloop)
 
 
 class FSMAdmin(StatesGroup):
@@ -109,6 +112,14 @@ async def print_invite(chat_member: types.Message):
 
 
 async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
+    async with session_maker() as session:
+        stmt = await session.execute(select(invite_message_class))
+        result = stmt.scalars().first()
+        print(result.id)
+        caption = result.invite_message
+        photo_id = result.invite_picture
+        print('123123123')
+        await session.commit()
     try:
         await bot.send_photo(chat_id=chat_member.from_user.id, photo=photo_id, caption=caption)
     except BotBlocked:
