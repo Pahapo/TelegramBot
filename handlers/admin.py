@@ -78,6 +78,7 @@ async def block_bot(message: types.Message):
 #     print(ID)
 
 async def change_invite_start(message: types.Message):
+    print('start and photo')
     if message.from_user.id == ADMIN_ID or message.from_user.id == SEC_ADMIN or message.from_user.id == trd:
         await FSMAdmin.photo.set()
         await message.reply('Загрузи фото')
@@ -86,6 +87,7 @@ async def change_invite_start(message: types.Message):
 
 
 async def load_invite_photo(message: types.Message, state: FSMContext):
+    print('message')
     async with state.proxy() as data:
         data['photo'] = message.photo[0].file_id
         await FSMAdmin.next()
@@ -93,6 +95,7 @@ async def load_invite_photo(message: types.Message, state: FSMContext):
 
 
 async def load_invite_message(message: types.Message, state=FSMContext):
+    print('load')
     async with state.proxy() as data:
         data['invite'] = message.text
         global photo_id
@@ -108,6 +111,7 @@ async def load_invite_message(message: types.Message, state=FSMContext):
 
 
 async def print_invite(chat_member: types.Message):
+    print('print message')
     if chat_member.from_user.id == ADMIN_ID or chat_member.from_user.id == SEC_ADMIN or chat_member.from_user.id == trd:
         await bot.send_photo(chat_member.from_user.id, photo=photo_id, caption=caption)
 
