@@ -129,6 +129,7 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest):
             print('Already exists: ' + str(chat_member.from_user.id))
         await session.commit()
     try:
+        print('send photo')
         await bot.send_photo(chat_id=chat_member.from_user.id, photo=photo_id, caption=caption)
     except BotBlocked:
         print('Bot Blocked:' + str(chat_member.from_user.id))
