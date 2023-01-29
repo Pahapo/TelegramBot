@@ -41,7 +41,7 @@ async def main() -> None:
         WEBAPP_HOST = '0.0.0.0'
         WEBAPP_PORT = os.getenv('PORT', default=8000)
         async_engine = create_async_engine(
-            os.getenv('DATABASE_URL'))
+            'postgres+asyncpg://ogqvnmdkjsxjus:a3bac4e2704930bfcc12377ffe53fee216c6c070f6b72fc7da9ad8a123fa532b@ec2-52-30-159-47.eu-west-1.compute.amazonaws.com:5432/daqu593lifqtvi')
         session_maker = get_session_maker(async_engine)
 
         await proceed_schemas(async_engine, BaseModel.metadata)
