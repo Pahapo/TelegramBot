@@ -6,8 +6,7 @@ import logging
 from aiogram import Dispatcher, Bot
 from db import BaseModel, get_session_maker, proceed_schemas, create_async_engine
 from aiogram.dispatcher.dispatcher import MemoryStorage
-
-DEBUG = False
+DEBUG = True
 from middlewares.admin_check import AdminCheckMiddleware
 
 
@@ -54,9 +53,9 @@ async def main() -> None:
                                session_maker=session_maker)
 
     else:
-        bot = Bot(token=os.getenv('token'))
+        bot = Bot(token=os.getenv('BOT_TOKEN'))
         async_engine = create_async_engine(
-            "postgresql+asyncpg://postgres:postgres@localhost:5432/newbd", )
+            "postgresql+asyncpg://ogqvnmdkjsxjus:a3bac4e2704930bfcc12377ffe53fee216c6c070f6b72fc7da9ad8a123fa532b@ec2-52-30-159-47.eu-west-1.compute.amazonaws.com:5432/daqu593lifqtvi", )
         session_maker = get_session_maker(async_engine)
         await proceed_schemas(async_engine, BaseModel.metadata)
         await dp.start_polling(bot, session_maker=session_maker)
