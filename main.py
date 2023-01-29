@@ -58,7 +58,7 @@ async def main() -> None:
             "postgresql+asyncpg://ogqvnmdkjsxjus:a3bac4e2704930bfcc12377ffe53fee216c6c070f6b72fc7da9ad8a123fa532b@ec2-52-30-159-47.eu-west-1.compute.amazonaws.com:5432/daqu593lifqtvi", )
         session_maker = get_session_maker(async_engine)
         await proceed_schemas(async_engine, BaseModel.metadata)
-        await dp.start_polling(bot, session_maker=session_maker)
+        await dp.start_polling(bot, session_maker=session_maker, skip_updates=True)
 
 
 if __name__ == '__main__':
