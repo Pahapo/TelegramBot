@@ -9,6 +9,8 @@ from aiogram.utils.keyboard import (ReplyKeyboardBuilder, ReplyKeyboardMarkup, K
 from sqlalchemy.orm import sessionmaker
 from aiogram import Bot
 from .admin import start, write_info
+
+
 # Write Data to DB
 
 
@@ -20,9 +22,10 @@ async def send_post(message: types.Message, bot: Bot, session_maker: sessionmake
         print(result.id)
         caption = result.invite_message
         photo_id = result.invite_picture
+        print('Photo: ', photo_id)
         await session.commit()
     if len(photo_id) == 0:
-        await  bot.send_message(chat_id=message.from_user.id,text=caption)
+        await  bot.send_message(chat_id=message.from_user.id, text=caption)
     else:
         await bot.send_photo(chat_id=message.from_user.id, photo=photo_id, caption=caption)
 
