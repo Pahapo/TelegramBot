@@ -17,9 +17,10 @@ async def get_only_text(message: types.Message, state: FSMContext):
     await state.set_state(InviteMessage.waiting_for_only_text)
 
 
-async def set_only_text(message: types.Message, state: FSMContext, session_maker: sessionmaker):
-    await state.update_data(image='', text=message.text)
+async def set_only_text(message: types.Message, state: FSMContext, session_maker: sessionmaker, bot: Bot):
+    await state.update_data(image='', text=message.html_text)
     data = await state.get_data()
-    await write_info(variable=data, session_maker=session_maker)
+    await write_info(variable=data,model_class=invite_message_class, session_maker=session_maker)
+    await bot.send_message(message.from_user.id, text=data['text'], parse_mode='html', disable_web_page_preview=True)
     await state.clear()
     await back_to_start(message)

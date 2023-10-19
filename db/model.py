@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import String, Column, Identity, Integer, Text, VARCHAR
@@ -22,10 +24,19 @@ class SendMessage(BaseModel):
     def __str__(self) -> str:
         return f'<MessageId:{self.id}>'
 
+
 class User(BaseModel):
     __tablename__ = 'users'
     id = Column(Integer, Identity(), primary_key=True)
     user_id = Column(VARCHAR(200), unique=True, nullable=False)
+    bot_token = Column(VARCHAR(200), nullable=False, default=os.getenv('token'))
 
     def __str__(self) -> str:
         return f'<User:{self.user_id}>'
+
+
+class Statistics(BaseModel):
+    __tablename__ = 'statistics'
+    id = Column(Integer, Identity(), primary_key=True)
+    blocked = Column(Integer, nullable=True)
+    available = Column(Integer, nullable=True)

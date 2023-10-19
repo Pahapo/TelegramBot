@@ -1,12 +1,14 @@
 from aiogram import BaseMiddleware
 from aiogram.types import Message
+from aiogram.exceptions import TelegramBadRequest
 from typing import Callable, Dict, Any, Awaitable
 import os
-# ADMIN_ID = int(os.getenv("ADMIN_ID"))
-# SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
-# trd = int(os.getenv("trd"))
-test = 792501294
-admin_list = [test]
+
+ADMIN_ID = int(os.getenv("ADMIN_ID"))
+SEC_ADMIN = int(os.getenv("SEC_ADMIN"))
+trd = int(os.getenv("trd"))
+
+admin_list = [ADMIN_ID, SEC_ADMIN, trd]
 
 
 class AdminCheckMiddleware(BaseMiddleware):
@@ -17,6 +19,9 @@ class AdminCheckMiddleware(BaseMiddleware):
             data: Dict[str, Any]
     ) -> Any:
         if event.from_user.id not in admin_list:
-            await event.answer('Вы не администратор')
+            try:
+                await event.answer('Вы не администратор')
+            except TelegramBadRequest:
+                print('Невозможно связаться с:', event.from_user.id)
         else:
             return await handler(event, data)

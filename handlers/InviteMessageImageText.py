@@ -8,26 +8,28 @@ from sqlalchemy.exc import IntegrityError
 from aiogram.utils.keyboard import (ReplyKeyboardBuilder, ReplyKeyboardMarkup, KeyboardButton)
 from sqlalchemy.orm import sessionmaker
 from aiogram import Bot
-from .admin import start, write_info
-
-
-# Write Data to DB
+from .admin import start, write_info, set_state_file_id, send_complete_post
 
 
 # Send Present Post
 async def send_post(message: types.Message, bot: Bot, session_maker: sessionmaker):
     async with session_maker() as session:
-        stmt = await session.execute(select(invite_message_class))
+        stmt = await session.execute(select(invite_message_class).where(invite_message_class.id==1))
         result = stmt.scalars().first()
         print(result.id)
         caption = result.invite_message
         photo_id = result.invite_picture
+        data = {
+            'image': photo_id,
+            'text': caption
+        }
         print('Photo: ', photo_id)
         await session.commit()
     if len(photo_id) == 0:
-        await  bot.send_message(chat_id=message.from_user.id, text=caption)
+        await bot.send_message(chat_id=message.from_user.id, text=caption, parse_mode='html',
+                               disable_web_page_preview=True)
     else:
-        await bot.send_photo(chat_id=message.from_user.id, photo=photo_id, caption=caption)
+        await send_complete_post(data, bot, message.from_user.id)
 
 
 # Invite Message State Class
@@ -66,17 +68,19 @@ async def set_image_text_message(message: types.Message, state: FSMContext):
 
 
 async def imageText_image_set(message: types.Message, state: FSMContext):
-    await state.update_data(image=message.photo[0].file_id)
+    await set_state_file_id(message, state)
     await message.answer('Введите текст приглашения')
     await state.set_state(InviteMessage.waiting_for_text)
 
 
-async def imageText_text_set(message: types.Message, state: FSMContext, session_maker: sessionmaker):
-    data = await state.update_data(text=message.text)
-    await write_info(variable=data, session_maker=session_maker)
+async def imageText_text_set(message: types.Message, state: FSMContext, session_maker: sessionmaker, bot: Bot):
+    data = await state.update_data(text=message.html_text)
+    await write_info(variable=data, model_class=invite_message_class, session_maker=session_maker)
+    await send_complete_post(data, bot, message.from_user.id)
     await state.clear()
-    return await back_to_start(message)
+    return await back_to_start(message, state)
 
 
-async def back_to_start(message: types.Message):
+async def back_to_start(message: types.Message, state: FSMContext):
+    await state.clear()
     return await start(message)

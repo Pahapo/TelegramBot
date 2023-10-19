@@ -1,10 +1,12 @@
 import os
 
 import asyncio
+
+
 from handlers import register_commands
 import logging
 from aiogram import Dispatcher, Bot
-from db import BaseModel, get_session_maker, proceed_schemas, create_async_engine
+from db import BaseModel, get_session_maker, create_async_engine
 from aiogram.dispatcher.dispatcher import MemoryStorage
 
 DEBUG = True
@@ -44,7 +46,7 @@ async def main() -> None:
             'postgresql+asyncpg://ogqvnmdkjsxjus:a3bac4e2704930bfcc12377ffe53fee216c6c070f6b72fc7da9ad8a123fa532b@ec2-52-30-159-47.eu-west-1.compute.amazonaws.com:5432/daqu593lifqtvi')
         session_maker = get_session_maker(async_engine)
 
-        await proceed_schemas(async_engine, BaseModel.metadata)
+        # await proceed_schemas(async_engine, BaseModel.metadata)
         await dp.start_webhook(bot, skip_updates=True,
                                webhook_path=WEBHOOK_PATH,
                                on_startup=on_startup,
@@ -56,9 +58,10 @@ async def main() -> None:
     else:
         bot = Bot(token=os.getenv('token'))
         async_engine = create_async_engine(
-            "postgresql+asyncpg://ogqvnmdkjsxjus:a3bac4e2704930bfcc12377ffe53fee216c6c070f6b72fc7da9ad8a123fa532b@ec2-52-30-159-47.eu-west-1.compute.amazonaws.com:5432/daqu593lifqtvi")
+            os.getenv('asyncpg_db'))
         session_maker = get_session_maker(async_engine)
-        await proceed_schemas(async_engine, BaseModel.metadata)
+        #  TO ALEMBIC
+        # await proceed_schemas(async_engine, BaseModel.metadata)
         await dp.start_polling(bot, session_maker=session_maker, skip_updates=True)
 
 
