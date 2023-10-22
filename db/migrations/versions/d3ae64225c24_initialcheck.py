@@ -22,7 +22,7 @@ def upgrade() -> None:
     op.drop_column('invite_message', 'chanel_name')
     op.drop_column('invite_message', 'chanel_id')
     op.add_column('users', sa.Column('bot_token', sa.VARCHAR(length=200), nullable=False,
-                                     server_default='5618506298:AAHqG6APc3Q2T_DVpvmfYtr2xreNsz-YjMQ'))
+                                     server_default=''))
     # ### end Alembic commands ###
 
 
