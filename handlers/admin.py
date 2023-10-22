@@ -88,7 +88,7 @@ async def inviteApplyMessage(chat_member: types.ChatJoinRequest, session_maker: 
             print('Already exists: ' + str(chat_member.from_user.id))
         await session.commit()
     print(f'sleep: {chat_member.from_user.id}')
-    await asyncio.sleep(120)
+    await asyncio.sleep(10)
     print('send photo')
     try:
         if len(data['text']) == 0:
